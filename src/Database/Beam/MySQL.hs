@@ -9,7 +9,7 @@ module Database.Beam.MySQL
   MySQLValueSyntax,
   MySQLInsertValuesSyntax,
   MySQLExpressionSyntax,
-  MySQLUpdateSyntax
+  MySQLUpdate,
 ) where
 
 import           Data.FakeUTC (FakeUTC (FakeUTC))
@@ -19,6 +19,6 @@ import           Database.Beam.MySQL.Extra
 import           Database.Beam.MySQL.Syntax.Value
 import           Database.Beam.MySQL.Syntax.Insert
 import           Database.Beam.MySQL.Syntax.Select
--- import           Database.Beam.MySQL.Syntax.Update
+import           Database.Beam.MySQL.Syntax.Update
 -- import           Database.Beam.MySQL.Syntax.Misc
 
