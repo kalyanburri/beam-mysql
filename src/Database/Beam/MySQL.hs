@@ -8,7 +8,8 @@ module Database.Beam.MySQL
   ViaJson(..), FakeUTC(..),
   MySQLValueSyntax,
   MySQLInsertValuesSyntax,
-  MySQLExpressionSyntax
+  MySQLExpressionSyntax,
+  MySQLUpdateSyntax
 ) where
 
 import           Data.FakeUTC (FakeUTC (FakeUTC))
