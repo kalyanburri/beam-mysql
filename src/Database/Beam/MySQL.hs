@@ -6,7 +6,7 @@ module Database.Beam.MySQL
   runBeamMySQL, runBeamMySQLDebug,
   dumpInsertSQL, dumpSelectSQL, dumpUpdateSQL, dumpDeleteSQL,
   ViaJson(..), FakeUTC(..),
-  MySQLValueSyntax,
+  MySQLValueSyntax(..),
   MySQLInsertValuesSyntax,
   MySQLExpressionSyntax,
   MySQLFieldNameSyntax(..),
