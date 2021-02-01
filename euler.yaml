@@ -41,9 +41,7 @@ overrides:
     sha256: 1dcd3n1lxlpjsz92lmr1nsx29mwwglim0gask04668sdiarr3x1v
 
 build-tools:
-- mysql57
 - coreutils
-- numactl
 - zlib
 
 nix-shell-tools:
