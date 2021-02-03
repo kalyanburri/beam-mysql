@@ -8,18 +8,18 @@ module Database.Beam.MySQL.FromField where
 import           Data.Aeson (FromJSON, decodeStrict)
 import           Data.Bits (Bits (zeroBits), toIntegralSized)
 import           Data.ByteString (ByteString)
-import qualified Data.ByteString.Char8 as Char8
 import           Data.FakeUTC (FakeUTC (FakeUTC))
 import           Data.Int (Int16, Int32, Int64, Int8)
 import           Data.Kind (Type)
 import           Data.Scientific (Scientific, toBoundedInteger)
 import           Data.Text (Text, pack, unpack)
-import           Data.Text.Encoding (decodeUtf8, encodeUtf8)
+import           Data.Text.Encoding (encodeUtf8)
 import           Data.Time (Day, LocalTime (LocalTime), TimeOfDay,
                             localTimeToUTC, midnight, utc)
 import           Data.ViaJson (ViaJson (ViaJson))
 import           Data.Word (Word16, Word32, Word64, Word8)
 import           Database.Beam.Backend.SQL (SqlNull (SqlNull))
+import           Database.Beam.MySQL.TextHandling (decodeText)
 import           Database.MySQL.Base (MySQLValue (..))
 import           Text.Read (readMaybe)
 import           Type.Reflection (TyCon, Typeable, typeRep, typeRepTyCon)
@@ -179,14 +179,13 @@ instance FromFieldStrict SqlNull where
 instance FromFieldStrict ByteString where
   {-# INLINABLE fromFieldStrict #-}
   fromFieldStrict = \case
-    MySQLText v  -> Right . encodeUtf8 $ v
     MySQLBytes v -> Right v
     v            -> handleNullOrMismatch v
 
 instance FromFieldStrict Text where
   {-# INLINABLE fromFieldStrict #-}
   fromFieldStrict = \case
-    MySQLText v -> Right . decodeUtf8 . encodeLatin1 $ v
+    MySQLText v -> Right . decodeText $ v
     v           -> handleNullOrMismatch v
 
 instance FromFieldStrict LocalTime where
@@ -216,10 +215,11 @@ instance FromFieldStrict TimeOfDay where
 instance (Typeable a, FromJSON a) => FromFieldStrict (ViaJson a) where
   {-# INLINABLE fromFieldStrict #-}
   fromFieldStrict = \case
-    MySQLText v -> case decodeStrict . encodeUtf8 . decodeUtf8 . encodeLatin1 $ v of
+    MySQLText v -> case decodeStrict . encodeUtf8 . decodeText $ v of
       Nothing -> Left . DecodeError NotValidJSON . typeRepTyCon $ (typeRep @a)
       Just x  -> Right . ViaJson $ x
-    v           -> handleNullOrMismatch v
+    v ->
+      handleNullOrMismatch v
 
 instance FromFieldStrict FakeUTC where
   {-# INLINABLE fromFieldStrict #-}
@@ -481,7 +481,3 @@ tyCon :: forall (a :: Type) .
   (Typeable a) =>
   TyCon
 tyCon = typeRepTyCon (typeRep @a)
-
--- Reverse-engineered from description of decodeLatin1
-encodeLatin1 :: Text -> ByteString
-encodeLatin1 = Char8.pack . unpack

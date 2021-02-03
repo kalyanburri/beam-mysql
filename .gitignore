@@ -1,3 +1,6 @@
+result
+cabal.project.local
+dist-newstyle
 cabal.sandbox.config
 .cabal-sandbox
 .stack-work
@@ -21,3 +24,5 @@ TAGS
 .nvimrc
 stack.yaml.lock
 *.prof
+dist-newstyle
+cabal.project.local

@@ -14,7 +14,7 @@ import           Control.Monad.IO.Class (MonadIO (liftIO))
 import           Data.Kind (Type)
 import           Data.String (fromString)
 import           Data.Word (Word16)
-import           Database.MySQL.Base (ConnectInfo (ciDatabase, ciHost, ciPort, ciUser),
+import           Database.MySQL.Base (ConnectInfo (ciCharset, ciDatabase, ciHost, ciPort, ciUser),
                                       defaultConnectInfoMB4)
 import           Fmt ((+|), (|+))
 import           System.Directory (createDirectory, getCurrentDirectory,
@@ -39,7 +39,8 @@ toConnectInfo db = defaultConnectInfoMB4 {
   ciHost = "localhost",
   ciPort = fromIntegral . port $ db,
   ciDatabase = "",
-  ciUser = fromString . user $ db
+  ciUser = fromString . user $ db,
+  ciCharset = 8
   }
 
 withTempDB :: forall (a :: Type) (m :: Type -> Type) .
@@ -88,7 +89,7 @@ buildInitCommand userName tmpDir = shell $
   userName |+
   " --datadir=" +|
   tmpDir |+
-  " --explicit-defaults-for-timestamp --log-error-verbosity=1"
+  " --explicit-defaults-for-timestamp --log-error-verbosity=1 --character-set-server=latin1 --collation-server=latin1_swedish_ci"
 
 buildRunCommand :: String -> FilePath -> String -> ProcessConfig () () ()
 buildRunCommand userName tmpDir sock = shell $
@@ -98,4 +99,4 @@ buildRunCommand userName tmpDir sock = shell $
   tmpDir |+
   " --socket=" +|
   sock |+
-  " --log-error-verbosity=1"
+  " --log-error-verbosity=1 --character-set-server=latin1 --collation-server=latin1_swedish_ci"

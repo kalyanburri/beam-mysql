@@ -1,0 +1,69 @@
+name: beam-mysql
+allowed-paths:
+- src
+- test
+- temp-db
+- beam-mysql.cabal
+- LICENSE
+
+
+dependencies:
+  euler-build:
+    branch: master
+    revision: aa20a46b6ae5d638c23fa009fb1dd9b07727ffa2
+  beam:
+    branch: master
+    revision: d36b29726570b6c5d228bee44d169282fe99ebdb
+
+overrides:
+  record-dot-preprocessor:
+    version: 0.2.7
+    sha256: 0dyn5wpn0p4sc1yw4zq9awrl2aa3gd3jamllfxrg31v3i3l6jvbw
+    source: hackage
+
+  bytestring-lexing:
+    source: github
+    owner: juspay
+    repo: bytestring-lexing
+    commit: 0a46db1139011736687cb50bbd3877d223bcb737
+    sha256: 1jrwhlp8xs4m21xfr843278j3i7h4sxyjpq67l6lzc36pqan9zlz
+  mysql-haskell:
+    source: github
+    owner: juspay
+    repo: mysql-haskell
+    commit: 788022d65538db422b02ecc0be138b862d2e5cee
+    sha256: 030qq1hgh15zkwa6j6x568d248iyfaw5idj2hh2mvb7j8xd1l4lv
+  binary-parsers: {}
+  wire-streams: {}
+  mason:
+    source: hackage
+    version: 0.2.3
+    sha256: 1dcd3n1lxlpjsz92lmr1nsx29mwwglim0gask04668sdiarr3x1v
+
+build-tools:
+- coreutils
+- zlib
+# moved to `custom-nix`
+# - mysql57
+# - numactl
+
+nix-shell-tools:
+- mysql57
+- zlib
+# - haskellPackages.cabal-fmt
+# - ghcide
+# - ghcide-ghc883
+
+custom-nix:
+  insert-binding: |-
+    isDarwin = super.stdenv.isDarwin;
+    linuxBuildTools = with super; lib.optionals (!isDarwin) [ mysql57 numactl ];
+    dontCheckDarwin =
+      if isDarwin then super.haskell.lib.dontCheck else x: x;
+
+  wrap-default-package:
+    left: |-
+      dontCheckDarwin (super.haskell.lib.addBuildTools (
+    right: |-
+      ) linuxBuildTools)
+    

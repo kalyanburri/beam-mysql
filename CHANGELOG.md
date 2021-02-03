@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.2.3.0
+
+* Properly handle Latin-1 vs UTF-8 encoding woes.
+
+## 1.2.2.0
+
+* Many documentation repairs.
+
+## 1.2.1.2
+
+* Change test bench defaults to use Latin-1 as the database encoding.
+* Add a test to ensure that Latin-1 encodings don't mangle data.
+
+## 1.2.1.1
+
+* Add a `ParsingMethod` sum type to indicate whether `beam-mysql` was compiled
+  with leniency or not.
+* Provide a `parsingMethod :: ParsingMethod` value, set by CPP according to
+  whether we compiled with leniency or not.
+
 ## 1.2.1.0
 
 * Added a wrapper `ViaJson`, plus instances, to aid unwrapping values packed
@@ -10,6 +30,9 @@
 * Ensure that `runInsertRowReturning` throws an exception if asked to work over
   a table without a primary key.
 * More tests.
+* Stricter checking of UTF-8 decoding in `FromField`.
+* Considerably more documentation.
+
 
 ## 1.2.0.0
 
