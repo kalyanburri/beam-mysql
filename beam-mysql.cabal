@@ -86,7 +86,10 @@ flag with-db
 
 library
   import:          common-lang
-  exposed-modules: Database.Beam.MySQL
+  exposed-modules:
+    Database.Beam.MySQL
+    Database.Beam.MySQL.Syntax.Select
+
   other-modules:
     Data.FakeUTC
     Data.ViaJson
@@ -99,7 +102,6 @@ library
     Database.Beam.MySQL.Syntax.Insert
     Database.Beam.MySQL.Syntax.Misc
     Database.Beam.MySQL.Syntax.Render
-    Database.Beam.MySQL.Syntax.Select
     Database.Beam.MySQL.Syntax.Update
     Database.Beam.MySQL.Syntax.Value
     Database.Beam.MySQL.TextHandling
