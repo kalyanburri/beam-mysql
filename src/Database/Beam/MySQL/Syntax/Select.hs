@@ -1,5 +1,6 @@
 -- Due to RDP plugin.
 {-# OPTIONS_GHC -Wno-incomplete-record-updates #-}
+
 {-# LANGUAGE TypeFamilies #-}
 
 module Database.Beam.MySQL.Syntax.Select where
